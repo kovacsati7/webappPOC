@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head lang="en">
+		<meta charset="UTF-8">
+		<title>Standalone webapp</title>
+		<link rel="stylesheet" href="./style.css">
+
+	</head>
+	<body>
+		<div class="container">
+			<table class="table">
+				<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Username</th>
+				</tr>
+				</thead>
+				<tbody id="user-data-container">
+            <tr>
+                <td colspan="3">Loading data ... </td>
+            </tr>
+                </table>"
+				</tbody>
+			</table>
+		</div>
+    <script type="text/javascript" src="./jquery.js"></script>
+    <script type="text/javascript">
+        // Select user data container
+        var userContainer = jQuery("#user-data-container");
+        // Make ajax request for getting user data
+        jQuery.ajax({
+            url:'http://localhost:3001/users'
+        }).then(function(serverResponse) {
+            userContainer.empty();
+            for(var key in serverResponse){
+                // Get current iteration item
+                var responseItem = serverResponse[key];
+                // Construct jquery for user row
+                var template = jQuery('<tr><th scope="row" class="table-id"></th><td class="table-fname"></td><td class="table-lname"></td><td class="table-username"></td>)</tr>');
+                // Populate user template with user data
+                template.find('.table-id').html(responseItem.id);
+                template.find('.table-fname').html(responseItem.fname);
+                template.find('.table-lname').html(responseItem.lname);
+                template.find('.table-username').html(responseItem.username);
+                // Append template in user data container
+                userContainer.append(template);
+            }
+        })
+    </script>
+	</body>
+</html>
